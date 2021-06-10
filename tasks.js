@@ -75,7 +75,7 @@ function unknownCommand(c){
  * @returns 
  */
 function help() {
-  return console.log('1- quit or exit\n'+'2- hello or hello "username"')
+  return console.log('1- quit or exit: \tto quit the app.\n'+'2- hello or hello "username": \tto greet the app.\n'+'3- add: \tto add a task.\n'+'4- list: \tto list all the tasks.\n'+'5- remove: \tto remove the last task.\n'+'remove "x": \tto remove a specific task which x replaces a specific number.\n'.trim());
 }
 
 let tasks = ["asdabsda1", "asdansda2"];
