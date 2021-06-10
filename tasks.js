@@ -52,6 +52,9 @@ function onDataReceived(text) {
   else if(text.match(/remove/)){
     remove(text);
   }
+  else if(text.match(/edit/)){
+    edit(text);
+  }
   else{
     unknownCommand(text);
   }
@@ -95,6 +98,29 @@ function add(text) {
 }
 
 /**
+ * edit allows you to edit the tasks
+ * 
+ * @return {void}
+ */
+function edit(text) {
+  let number = text.match(/^\d+/)-1;
+  let editedText = text.trim().replace(/edit\s\d+|edit\s/,"");
+  if(text.match(/edit\s\D\w+/)){
+    tasks.splice(tasks[number],1,)
+    tasks.push(editedText);
+  }
+  else if(text.match(/edit\s\d+\w+/) && number < tasks.length){
+    tasks.splice(tasks[number],1,editedText);
+  }
+  else{
+    console.log('Please insert the right tasks');
+  }
+  console.log(tasks);
+}
+
+
+
+/**
  * removes a task
  * 
  * @return {void}
@@ -106,7 +132,7 @@ function remove(text){
   if(text === "remove\n"){
     tasks.pop();
   }
-  else if(text.match(/^remove/gi) && [number] < tasks.length){
+  else if(text.match(/^remove/gi) && number < tasks.length){
     console.log('Task "'+tasks[number]+'" has been removed');
     tasks.splice(number,1);
   }
