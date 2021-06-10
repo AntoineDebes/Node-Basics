@@ -58,6 +58,12 @@ function onDataReceived(text) {
   else if(text.match(/check/)){
     check(text);
   }
+  else if(text.match(/save/)){
+    save();
+  }
+  else if(text.match(/load/)){
+    load();
+  }
   else{
     unknownCommand(text);
   }
@@ -165,15 +171,49 @@ function remove(text){
   }
   console.log(tasks);
 }
-
+/**
+ * list it lists the tasks done or undone
+ * 
+ * @returns {void}
+ */
 function list() {
   let listing = tasks.map(task =>((task.check+task.value+'\n')));
   let output = listing.toString().split(",").join("").trim();
   return console.log(output);
 }
 
+
 /**
- * Says hello
+ * save it saves the data Object into a local file
+ * 
+ * @returns {void} 
+ */
+function save() {
+  const fs = require('fs');
+  let json = JSON.stringify(tasks,null,2);
+
+  fs.writeFile('./database.json', json, (err) => {
+    if(err) throw err;
+  })
+}
+
+/**
+ * load it loads data from a specific file
+ * 
+ * @returns {void}
+ */
+function load() {
+  const fs = require('fs');
+
+  fs.readFile('./database.json', (err, data) => {
+      if (err) throw err;
+      tasks = JSON.parse(data);
+  });
+}
+
+
+/**
+ * Says hello with a name sometimes
  *
  * @returns {void}
  */
