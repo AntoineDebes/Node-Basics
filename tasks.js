@@ -49,6 +49,9 @@ function onDataReceived(text) {
   else if(text.match(/add\s\w+/)){
     add(text);
   }
+  else if(text.match(/remove/)){
+    remove(text);
+  }
   else{
     unknownCommand(text);
   }
@@ -75,7 +78,7 @@ function help() {
   return console.log('1- quit or exit\n'+'2- hello or hello "username"')
 }
 
-let tasks = ["asdabsda", "asdansda"];
+let tasks = ["asdabsda1", "asdansda2"];
 /**
  * prints the list of tasks
  * 
@@ -89,6 +92,23 @@ let tasks = ["asdabsda", "asdansda"];
  */
 function add(text) {
   tasks.push((tasks.length+1)+"- " + text.trim());
+}
+
+/**
+ * removes a task
+ * 
+ * @return {void}
+ */
+
+function remove(text){
+  if(text === "remove\n"){
+    tasks.pop();
+  }
+  else{
+    let number = Math.floor(text);
+    tasks.splice(number-1 , 1)
+  }
+  console.log(tasks);
 }
 
 function list() {
