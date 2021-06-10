@@ -55,6 +55,9 @@ function onDataReceived(text) {
   else if(text.match(/edit/)){
     edit(text);
   }
+  else if(text.match(/check/)){
+    check(text);
+  }
   else{
     unknownCommand(text);
   }
@@ -78,10 +81,10 @@ function unknownCommand(c){
  * @returns 
  */
 function help() {
-  return console.log('1- quit or exit: \tto quit the app.\n'+'2- hello or hello "username": \tto greet the app.\n'+'3- add: \tto add a task.\n'+'4- list: \tto list all the tasks.\n'+'5- remove: \tto remove the last task.\n'+'remove "x": \tto remove a specific task which x replaces a specific number.\n'.trim());
+  return console.log('1- quit or exit: \tto quit the app.\n'+'2- hello or hello "username": \tto greet the app.\n'+'3- add: \tto add a task.\n'+'4- list: \tto list all the tasks.\n'+'5- remove: \tto remove the last task.\n'+'remove "x": \tto remove a specific task which x replaces a specific number.\n'+'6- check or uncheck: \tcheck "x" which x represent the number of the task.\n'.trim());
 }
 
-let tasks = ["asdabsda1", "asdansda2"];
+let tasks = [{check: false,value:"asdabsda1"},{check: false,value: "asdansda2"}];
 /**
  * prints the list of tasks
  * 
@@ -94,7 +97,9 @@ let tasks = ["asdabsda1", "asdansda2"];
  * @returns {void}
  */
 function add(text) {
-  tasks.push((tasks.length+1)+"- " + text.trim());
+  let filteredText = text.replace('add ','');
+  let output = {check: "done" , value :(tasks.length+1)+"- " + filteredText.trim()};
+  tasks.push(output);
 }
 
 /**
@@ -105,20 +110,39 @@ function add(text) {
 function edit(text) {
   let number = text.match(/^\d+/)-1;
   let editedText = text.trim().replace(/edit\s\d+|edit\s/,"");
+
   if(text.match(/edit\s\D\w+/)){
-    tasks.splice(tasks[number],1,)
+    tasks.splice(tasks[number],1,);
     tasks.push(editedText);
   }
   else if(text.match(/edit\s\d+\w+/) && number < tasks.length){
     tasks.splice(tasks[number],1,editedText);
   }
   else{
-    console.log('Please insert the right tasks');
+    console.log('Please select the right tasks');
   }
   console.log(tasks);
 }
 
+/**
+ * check it checkes the tasks that are undone
+ * uncheck it uncheckes the tasks that are done
+ * 
+ * @return {void} 
+ */
+function check(text){
+  let number = text.match(/\d+/)-1;
+  if(text === "check\n" || text === "uncheck\n"){
+    console.log("Please insert the task that you want to select")
+  }
+  else if(text.match(/^check\s\d+/)){
+    tasks[number].check = true;
 
+  }
+  else if(text.match(/^uncheck\s\d+/)){
+    tasks[number].check = false;
+  }
+}
 
 /**
  * removes a task
@@ -143,7 +167,7 @@ function remove(text){
 }
 
 function list() {
-  let listing = tasks.map(task => task+'\n');
+  let listing = tasks.map(task =>((task.check+task.value+'\n')));
   let output = listing.toString().split(",").join("").trim();
   return console.log(output);
 }
