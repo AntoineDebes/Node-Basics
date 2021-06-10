@@ -43,6 +43,9 @@ function onDataReceived(text) {
   else if(text === 'help\n'){
     help();
   }
+  else if(text === 'list\n'){
+    list(text)
+  }
   else{
     unknownCommand(text);
   }
@@ -67,6 +70,19 @@ function unknownCommand(c){
  */
 function help() {
   return console.log('1- quit or exit\n'+'2- hello or hello "username"')
+}
+
+let tasks = ["asdabsda", "asdansda"];
+/**
+ * prints the list of tasks
+ * 
+ * @returns {void}
+ */
+
+function list() {
+  let listing = tasks.map(task => task+'\n');
+  let output = listing.toString().split(",").join("").trim();
+  return console.log(output);
 }
 
 /**
