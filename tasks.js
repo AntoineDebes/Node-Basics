@@ -40,6 +40,9 @@ function onDataReceived(text) {
   else if(text.match(/hello\w*/)){
     hello(text);
   }
+  else if(text === 'help\n'){
+    help();
+  }
   else{
     unknownCommand(text);
   }
@@ -57,6 +60,14 @@ function unknownCommand(c){
   console.log('unknown command: "'+c.trim()+'"')
 }
 
+/**
+ * prints "All the available commands"
+ * 
+ * @returns 
+ */
+function help() {
+  return console.log('1- quit or exit\n'+'2- hello')
+}
 
 /**
  * Says hello
