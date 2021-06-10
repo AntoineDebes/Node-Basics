@@ -37,8 +37,8 @@ function onDataReceived(text) {
   if (text === 'quit\n') {
     quit();
   }
-  else if(text === 'hello\n'){
-    hello();
+  else if(text.match(/hello\w*/)){
+    hello(text);
   }
   else{
     unknownCommand(text);
@@ -63,8 +63,8 @@ function unknownCommand(c){
  *
  * @returns {void}
  */
-function hello(){
-  console.log('hello!')
+function hello(text){
+  return console.log(text.trim() + " !");
 }
 
 
