@@ -66,7 +66,7 @@ function unknownCommand(c){
  * @returns 
  */
 function help() {
-  return console.log('1- quit or exit\n'+'2- hello')
+  return console.log('1- quit or exit\n'+'2- hello or hello "username"')
 }
 
 /**
