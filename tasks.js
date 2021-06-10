@@ -98,15 +98,20 @@ function add(text) {
  * removes a task
  * 
  * @return {void}
- */
+ */  
 
 function remove(text){
+  var number = text.match(/\d+/)-1;
+
   if(text === "remove\n"){
     tasks.pop();
   }
+  else if(text.match(/^remove/gi) && [number] < tasks.length){
+    console.log('Task "'+tasks[number]+'" has been removed');
+    tasks.splice(number,1);
+  }
   else{
-    let number = Math.floor(text);
-    tasks.splice(number-1 , 1)
+    console.log("Please insert the correct number");
   }
   console.log(tasks);
 }
