@@ -44,7 +44,10 @@ function onDataReceived(text) {
     help();
   }
   else if(text === 'list\n'){
-    list(text)
+    list(text);
+  }
+  else if(text.match(/add\s\w+/)){
+    add(text);
   }
   else{
     unknownCommand(text);
@@ -78,6 +81,15 @@ let tasks = ["asdabsda", "asdansda"];
  * 
  * @returns {void}
  */
+
+/**
+ * adds tasks to the list array
+ * 
+ * @returns {void}
+ */
+function add(text) {
+  tasks.push((tasks.length+1)+"- " + text.trim());
+}
 
 function list() {
   let listing = tasks.map(task => task+'\n');
