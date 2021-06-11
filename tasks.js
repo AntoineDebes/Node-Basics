@@ -34,39 +34,27 @@ function startApp(name){
  * @returns {void}
  */
 function onDataReceived(text) {
-  if (text === 'quit\n' || text === 'exit\n') {
-    quit();
-  }
-  else if(text.match(/hello\w*/)){
-    hello(text);
-  }
-  else if(text === 'help\n'){
-    help();
-  }
-  else if(text === 'list\n'){
-    list(text);
-  }
-  else if(text.match(/add\s\w+/)){
-    add(text);
-  }
-  else if(text.match(/remove/)){
-    remove(text);
-  }
-  else if(text.match(/edit/)){
-    edit(text);
-  }
-  else if(text.match(/check/)){
-    check(text);
-  }
-  else if(text.match(/save/)){
-    save();
-  }
-  else if(text.match(/load/)){
-    load();
-  }
-  else{
-    unknownCommand(text);
-  }
+  if (text === 'quit\n' || text === 'exit\n') return quit();
+  
+  if(text.match(/hello\w*/)) return hello(text);
+    
+  if(text === 'help\n') return help();
+ 
+  if(text === 'list\n') return list(text);
+    
+  if(text.match(/add\s\w+/)) return add(text);
+    
+  if(text.match(/remove/)) return remove(text);
+    
+  if(text.match(/edit/)) return edit(text);
+    
+  if(text.match(/check/)) return check(text);
+   
+  if(text.match(/save/)) return save();
+    
+  if(text.match(/load/)) return load();
+    
+  else return unknownCommand(text);
 }
 
 
@@ -117,7 +105,7 @@ function edit(text) {
   let number = text.match(/^\d+/)-1;
   let editedText = text.trim().replace(/edit\s\d+|edit\s/,"");
 
-  if(text.match(/edit\s\D\w+/)){
+  if(text.match(/edit\s\D\w+/)){ 
     tasks.splice(tasks[number],1,);
     tasks.push(editedText);
   }
