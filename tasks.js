@@ -15,6 +15,8 @@ function startApp(name){
   process.stdin.on('data', onDataReceived);
   console.log(`Welcome to ${name}'s application!`)
   console.log("--------------------")
+  argument(process.argv);
+  console.log(disk)
 }
 
 
@@ -42,7 +44,7 @@ function onDataReceived(text) {
  
   if(text === 'list\n') return list(text);
     
-  if(text.match(/add\s\w+/)) return add(text);
+  if(text.match(/add\s+\w+/)) return add(text);
     
   if(text.match(/remove/)) return remove(text);
     
@@ -77,14 +79,11 @@ function unknownCommand(c){
 function help() {
   return console.log('1- quit or exit: \tto quit the app.\n'+'2- hello or hello "username": \tto greet the app.\n'+'3- add: \tto add a task.\n'+'4- list: \tto list all the tasks.\n'+'5- remove: \tto remove the last task.\n'+'remove "x": \tto remove a specific task which x replaces a specific number.\n'+'6- check or uncheck: \tcheck "x" which x represent the number of the task.\n'.trim());
 }
-
-let tasks = [{check: false,value:"asdabsda1"},{check: false,value: "asdansda2"}];
 /**
- * prints the list of tasks
- * 
- * @returns {void}
+ * global tasks array
  */
-
+// let tasks = [{check: "[ ]",value:"asdabsda1"},{check: "[ ]",value: "asdansda2"}];
+let tasks = null;
 /**
  * adds tasks to the list array
  * 
@@ -102,15 +101,15 @@ function add(text) {
  * @return {void}
  */
 function edit(text) {
-  let number = text.match(/^\d+/)-1;
-  let editedText = text.trim().replace(/edit\s\d+|edit\s/,"");
+  let number = text.match(/\d+/)-1;
+  let taskNumber = tasks.length-1;
+  let editedText = text.replace(/edit\s+\d+|edit\s+/,"").trim();
 
-  if(text.match(/edit\s\D\w+/)){ 
-    tasks.splice(tasks[number],1,);
-    tasks.push(editedText);
+  if(text.match(/edit\s+\D\w+/)){ 
+    tasks[taskNumber].value = editedText;
   }
-  else if(text.match(/edit\s\d+\w+/) && number < tasks.length){
-    tasks.splice(tasks[number],1,editedText);
+  else if(text.match(/edit\s+\d+\w*/) && number < taskNumber){
+    tasks[number].value = editedText;
   }
   else{
     console.log('Please select the right tasks');
@@ -129,12 +128,12 @@ function check(text){
   if(text === "check\n" || text === "uncheck\n"){
     console.log("Please insert the task that you want to select")
   }
-  else if(text.match(/^check\s\d+/)){
-    tasks[number].check = true;
+  else if(text.match(/^check\s+\d+/)){
+    tasks[number].check = "[✓]";
 
   }
-  else if(text.match(/^uncheck\s\d+/)){
-    tasks[number].check = false;
+  else if(text.match(/^uncheck\s+\d+/)){
+    tasks[number].check = "[ ]";
   }
 }
 
@@ -165,6 +164,7 @@ function remove(text){
  * @returns {void}
  */
 function list() {
+  if(tasks === null) return console.log("List is empty");
   let listing = tasks.map(task =>((task.check+task.value+'\n')));
   let output = listing.toString().split(",").join("").trim();
   return console.log(output);
@@ -176,25 +176,33 @@ function list() {
  * 
  * @returns {void} 
  */
+
+
 function save() {
   const fs = require('fs');
   let json = JSON.stringify(tasks,null,2);
 
-  fs.writeFile('./database.json', json, (err) => {
+  fs.writeFile(disk, json, (err) => {
     if(err) throw err;
-  })
+  });
 }
+
 
 /**
  * load it loads data from a specific file
  * 
  * @returns {void}
  */
+
+
+
 function load() {
   const fs = require('fs');
-
-  fs.readFile('./database.json', (err, data) => {
-      if (err) throw err;
+  fs.readFileSync(disk, (err, data) => {
+      if (err) {
+        console.log("no data found")
+      }
+      console.log(data);
       tasks = JSON.parse(data);
   });
 }
@@ -216,8 +224,38 @@ function hello(text){
  * @returns {void}
  */
 function quit(){
-  console.log('Quitting now, goodbye!')
+
+  console.log('Quitting now, goodbye!');
+  save();
   process.exit();
+
+}
+
+/**
+ * It takes an argument and checks for the value
+ * 
+ * @returns {void}
+ */
+
+let disk = "./database.json";
+
+function argument(text){
+  const fs = require('fs');
+  let output = text[2];
+
+  if(output !== undefined){
+
+    if(fs.existsSync(output)){
+      disk = output.toString();
+    }
+    else if(output.match(/.json$/g)){
+      fs.writeFileSync(output, json, (err) =>{
+        if (err) throw err;
+      })
+      disk = output;
+    }
+  }
+  load();
 }
 
 // The following line starts the application
